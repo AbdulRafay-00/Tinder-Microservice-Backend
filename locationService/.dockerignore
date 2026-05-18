@@ -1,0 +1,32 @@
+# Ignore build outputs
+target/
+build/
+
+# Ignore packaged artifacts
+*.jar
+*.war
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+
+# Maven wrapper: ignore .mvn except keep the wrapper jar
+.mvn/
+!.mvn/wrapper/maven-wrapper.jar
+mvnw
+mvnw.cmd
+
+# Environment and local files
+.env
+application.properties
+*.log
+logs/
+
+# Docker files (exclude if you don't want them in context)
+Dockerfile
+docker-compose.yaml
+
+# OS files
+.DS_Store
+Thumbs.db

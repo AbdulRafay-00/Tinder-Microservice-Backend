@@ -1,0 +1,31 @@
+# Ignore Maven build output
+
+# Ignore IDE and editor folders
+.idea/
+.vscode/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+
+# Logs and temporary files
+*.log
+
+# Java build artifacts
+*.class
+*.jar
+*.war
+
+# Local env and secrets
+.env
+src/main/resources/application.properties
+
+# Maven wrapper directory (not needed in build context)
+.mvn/
+
+# Node modules (if present)
+node_modules/

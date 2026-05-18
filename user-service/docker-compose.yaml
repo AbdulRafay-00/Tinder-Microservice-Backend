@@ -1,0 +1,54 @@
+
+name: tinder-user-service
+
+services:
+  mysql:
+    image: mysql:8.0.43
+    container_name: tinder-user-service-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: tinder_user_service
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${DB_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - tinder-network
+
+  user-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tinder-user-service
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tinder_user_service
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQLDialect
+      SECRET_KEY: ${JWT_SECRET_KEY}
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: Tinder-kafka:9092
+    networks:
+      - tinder-network
+
+volumes:
+  mysql_data:
+
+networks:
+  tinder-network:
+    external: true

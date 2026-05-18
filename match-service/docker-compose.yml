@@ -1,0 +1,49 @@
+name: tinder-match-service
+
+services:
+  mysql:
+    image: mysql:8.0.43
+    container_name: match-service-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: tinder_match_service
+    ports:
+      - "3309:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${DB_PASSWORD}"]
+      timeout: 20s
+      retries: 10
+      interval: 10s
+    networks:
+      - tinder-network  # ✅ same network as app
+
+  match-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: match-service-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tinder_match_service
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: Tinder-kafka:9092  # ✅ ADD THIS
+    ports:
+      - "8083:8083"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - tinder-network
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+
+networks:
+  tinder-network:
+    external: true  # ✅ fixed syntax (was missing colon)
