@@ -1,9 +1,7 @@
 # Ignore build outputs
-target/
 build/
 
 # Ignore packaged artifacts
-*.jar
 *.war
 
 # IDEs

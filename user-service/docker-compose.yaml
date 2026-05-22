@@ -33,7 +33,8 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tinder_user_service
+      # SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tinder_user_service
+      SPRING_DATASOURCE_URL: jdbc:mysql://tinder-user-service-mysql:3306/tinder_user_service
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver

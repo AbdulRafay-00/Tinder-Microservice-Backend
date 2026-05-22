@@ -17,7 +17,7 @@ services:
       retries: 10
       interval: 10s
     networks:
-      - tinder-network  # ✅ same network as app
+      - tinder-network
 
   match-service:
     build:
@@ -25,13 +25,15 @@ services:
       dockerfile: Dockerfile
     container_name: match-service-app
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tinder_match_service
+      # SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tinder_match_service
+      SPRING_DATASOURCE_URL: jdbc:mysql://match-service-mysql:3306/tinder_match_service
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_SHOW_SQL: "true"
       SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
       SPRING_KAFKA_BOOTSTRAP_SERVERS: Tinder-kafka:9092  # ✅ ADD THIS
+      SECRET_KEY: ${JWT_SECRET_KEY}
     ports:
       - "8083:8083"
     depends_on:
@@ -46,4 +48,4 @@ volumes:
 
 networks:
   tinder-network:
-    external: true  # ✅ fixed syntax (was missing colon)
+    external: true

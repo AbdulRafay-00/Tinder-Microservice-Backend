@@ -1,11 +1,12 @@
-package com.rafay.locationService.Kafka.NearbySearchSuggestion;
+package com.rafay.match_service.Kafka.NearBySuggestionListner;
 
-import com.rafay.locationService.DTO.NearbySearchResultDto;
 
 import tools.jackson.databind.ObjectMapper;
 
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+
+import com.rafay.match_service.Dtos.NearbySearchResultDto;
 
 @Service
 public class NearbySearchResultKafkaConsumer {
