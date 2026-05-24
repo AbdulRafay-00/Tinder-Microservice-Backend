@@ -1,4 +1,4 @@
-package com.rafay.API.Gateway;
+package com.rafay.API_Gateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

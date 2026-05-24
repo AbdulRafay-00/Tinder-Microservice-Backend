@@ -44,6 +44,7 @@ services:
       SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQLDialect
       SECRET_KEY: ${JWT_SECRET_KEY}
       SPRING_KAFKA_BOOTSTRAP_SERVERS: Tinder-kafka:9092
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://tinder-service-registry:8761/eureka/
     networks:
       - tinder-network
 
