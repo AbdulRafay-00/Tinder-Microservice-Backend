@@ -1,22 +1,20 @@
 package com.rafay.locationService.Kafka.UserLiveLocationKafka;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rafay.locationService.DTO.NearbySearchEventDto;
 import com.rafay.locationService.DTO.NearbySearchResultDto;
 import com.rafay.locationService.Kafka.NearbySearchSuggestion.NearbySearchKafkaProducer;
-import com.rafay.locationService.Service.locationService.LocationService;
-
-import tools.jackson.databind.ObjectMapper;
+import com.rafay.locationService.Service.locationService.NearbySearchService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 public class LiveLocationKafkaConsumer {
 
     @Autowired
-    private LocationService locationService;
+    private NearbySearchService nearbySearchService;
 
     @Autowired
     private NearbySearchKafkaProducer nearbySearchKafkaProducer;
@@ -34,19 +32,14 @@ public class LiveLocationKafkaConsumer {
 
             System.out.println("📨 Received: " + event.getUserId());
 
-            List<String> nearbyUserIds = locationService.getRecommendations(
+            NearbySearchResultDto result = nearbySearchService.processNearbySearch(
                 event.getUserId(),
                 event.getLatitude(),
                 event.getLongitude()
             );
 
-            System.out.println("✅ Nearby users found: " + nearbyUserIds.size());
-            System.out.println(nearbyUserIds);
-
-            NearbySearchResultDto result = new NearbySearchResultDto(
-                event.getUserId(),
-                nearbyUserIds
-            );
+            System.out.println("✅ Nearby users found: " + result.getNearbyUserIds().size());
+            System.out.println(result.getNearbyUserIds());
 
             nearbySearchKafkaProducer.publishNearbyResult(result);
 
