@@ -115,6 +115,7 @@ public class JwtAuthFilter implements WebFilter {
     // ❌ REMOVED: private final String loginRedirectUrl;
 
     private static final List<String> PUBLIC_PATHS = List.of(
+        
             "/login/portal",      // ✅ CHANGED: your actual login path
             "/auth/register",
             "/actuator/health"
@@ -122,6 +123,7 @@ public class JwtAuthFilter implements WebFilter {
 
     // ❌ REMOVED: @Value and loginRedirectUrl from constructor
     public JwtAuthFilter(JwtUtil jwtUtil) {
+        System.out.println("JwtAuthFilter initialized with JwtUtil: ");
         this.jwtUtil = jwtUtil;
     }
 
