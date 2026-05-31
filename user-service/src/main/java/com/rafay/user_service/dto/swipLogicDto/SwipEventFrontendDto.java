@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SwipEventFrontendDto {
     private String swipedId;
-    private String swipeDirection;
+    private SwipeDirection swipeDirection;
 }

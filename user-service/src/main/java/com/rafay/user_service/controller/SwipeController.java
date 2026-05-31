@@ -4,13 +4,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rafay.user_service.dto.swipLogicDto.SwipEventFrontendDto;
 import com.rafay.user_service.service.SwipService.ProducerSwipService;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/swipe")
@@ -19,15 +18,14 @@ public class SwipeController {
     private ProducerSwipService producer;
     @PostMapping("/event")
     public ResponseEntity<String> processSwipeEvent(@RequestBody SwipEventFrontendDto swipEventFrontendDto,
-        HttpServletRequest httpRequest
+        @RequestHeader(value = "X-User-Id", required = false) String swiperId
     ){
-        String swiperId = (String) httpRequest.getAttribute("userId"); // from JWT filter
         System.out.println("Processing swipe controller userId=" + swiperId);
         System.out.println("DTO received: " + swipEventFrontendDto);
         
         if (swiperId == null || swiperId.isBlank()) {
-            System.err.println("ERROR: No userId in request. Check Authorization header and JWT filter.");
-            return ResponseEntity.badRequest().body("Missing or invalid JWT token");
+            System.err.println("ERROR: No userId in request. Check gateway forwarded headers.");
+            return ResponseEntity.badRequest().body("Missing user identity from gateway");
         }
         
         if (swipEventFrontendDto == null || swipEventFrontendDto.getSwipedId() == null) {

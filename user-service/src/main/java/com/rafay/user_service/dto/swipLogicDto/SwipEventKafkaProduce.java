@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class SwipEventKafkaProduce {
     private String swiperId;
     private String swipedId;
-    private String swipeDirection;
+    private SwipeDirection swipeDirection;
 }

@@ -28,7 +28,7 @@ public class NearUserList {
 
     public NearbySearchResultDto getNearUserList(LocationRequset locationRequest, String userId) {
 
-        // Step 1 — check cache first
+        //  — check cache first
         List<String> cachedResult = nearByUserCache.getCachedNearbyUsers(userId);
         if (cachedResult != null && !cachedResult.isEmpty()) {
             System.out.println("✅ Cache HIT for: " + userId);
@@ -37,22 +37,20 @@ public class NearUserList {
 
         System.out.println("❌ Cache MISS for: " + userId);
 
-        // Step 2 — call Location Service
+        // — call Location Service
         NearLocationRequestDTO nearLocationRequestDTO = new NearLocationRequestDTO();
         nearLocationRequestDTO.setUserId(userId);
         nearLocationRequestDTO.setLatitude(locationRequest.getLatitude());
         nearLocationRequestDTO.setLongitude(locationRequest.getLongitude());
 
-        ResponseEntity<NearbySearchResultDto> nearbySearchResponse = nearByReq
-                .getNearbySearchSync(nearLocationRequestDTO);
+        ResponseEntity<NearbySearchResultDto> nearbySearchResponse = nearByReq.getNearbySearchSync(nearLocationRequestDTO);
         NearbySearchResultDto nearbyResult = nearbySearchResponse == null ? null : nearbySearchResponse.getBody();
 
-        if (nearbyResult == null || nearbyResult.getNearbyUserIds() == null
-                || nearbyResult.getNearbyUserIds().isEmpty()) {
+        if (nearbyResult == null || nearbyResult.getNearbyUserIds() == null || nearbyResult.getNearbyUserIds().isEmpty()) {
             throw new NoNearbyUsersException(userId);
         }
 
-        // Step 3 — call Match Service
+        //  — call Match Service
         ResponseEntity<NearbySearchResultDto> filteredResponse = filteredList.acceptNearbyUsers(nearbyResult);
         NearbySearchResultDto filteredResult = filteredResponse == null ? null : filteredResponse.getBody();
 
@@ -60,7 +58,7 @@ public class NearUserList {
             throw new NoNearbyUsersException(userId);
         }
 
-        // Step 4 — store in Redis
+        // — store in Redis
         nearByUserCache.cacheNearbyUsers(userId, filteredResult.getNearbyUserIds());
         System.out.println("✅ Cached " + filteredResult.getNearbyUserIds().size() + " users for: " + userId);
 

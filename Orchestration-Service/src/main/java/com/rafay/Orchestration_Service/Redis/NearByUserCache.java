@@ -22,9 +22,7 @@ public class NearByUserCache {
 
     // store full list in Redis
     public void cacheNearbyUsers(String userId, List<String> userIds) {
-        if (userIds == null || userIds.isEmpty()) {
-            return;
-        }
+
         String key = buildCacheKey(userId);
         redisTemplate.opsForList().rightPushAll(key, userIds);
         redisTemplate.expire(key, Duration.ofMinutes(CACHE_TTL_MINUTES));
