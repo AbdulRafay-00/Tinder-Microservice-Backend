@@ -1,42 +1,69 @@
 package com.rafay.Orchestration_Service.service;
 
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.rafay.Orchestration_Service.DTO.LocationRequset;
 import com.rafay.Orchestration_Service.DTO.NearLocationRequestDTO;
 import com.rafay.Orchestration_Service.DTO.NearbySearchResultDto;
+import com.rafay.Orchestration_Service.Redis.NearByUserCache;
 import com.rafay.Orchestration_Service.FeignClients.NearByUserEvent.NearByReq;
+import com.rafay.Orchestration_Service.FeignClients.NearByUserEvent.FilteredList;
 import com.rafay.Orchestration_Service.GlobalExeption.NoNearbyUsersException;
+
 @Service
 public class NearUserList {
 
     private final NearByReq nearByReq;
+    private final FilteredList filteredList;
+    private final NearByUserCache nearByUserCache;
 
-    // ✅ Only inject Feign Client, not DTO
-    public NearUserList(NearByReq nearByReq) {
+    public NearUserList(NearByReq nearByReq, FilteredList filteredList, NearByUserCache nearByUserCache) {
         this.nearByReq = nearByReq;
+        this.filteredList = filteredList;
+        this.nearByUserCache = nearByUserCache;
     }
 
     public NearbySearchResultDto getNearUserList(LocationRequset locationRequest, String userId) {
-        
-        // ✅ Create DTO inside method, not injected
+
+        // Step 1 — check cache first
+        List<String> cachedResult = nearByUserCache.getCachedNearbyUsers(userId);
+        if (cachedResult != null && !cachedResult.isEmpty()) {
+            System.out.println("✅ Cache HIT for: " + userId);
+            return new NearbySearchResultDto(userId, cachedResult);
+        }
+
+        System.out.println("❌ Cache MISS for: " + userId);
+
+        // Step 2 — call Location Service
         NearLocationRequestDTO nearLocationRequestDTO = new NearLocationRequestDTO();
         nearLocationRequestDTO.setUserId(userId);
         nearLocationRequestDTO.setLatitude(locationRequest.getLatitude());
         nearLocationRequestDTO.setLongitude(locationRequest.getLongitude());
 
-        // call Location Service
-        NearbySearchResultDto nearbyResult = nearByReq.getNearbySearchSync(nearLocationRequestDTO).getBody();
+        ResponseEntity<NearbySearchResultDto> nearbySearchResponse = nearByReq
+                .getNearbySearchSync(nearLocationRequestDTO);
+        NearbySearchResultDto nearbyResult = nearbySearchResponse == null ? null : nearbySearchResponse.getBody();
 
-        // check if empty
-        if (nearbyResult == null || nearbyResult.getNearbyUserIds().isEmpty()) {
-            System.out.println("No nearby users found for user: " + userId);
+        if (nearbyResult == null || nearbyResult.getNearbyUserIds() == null
+                || nearbyResult.getNearbyUserIds().isEmpty()) {
             throw new NoNearbyUsersException(userId);
         }
 
-        System.out.println("Nearby users for user " + userId + ": " + nearbyResult.getNearbyUserIds());
-        
-        // ✅ return result so controller can use it
-        return nearbyResult;
+        // Step 3 — call Match Service
+        ResponseEntity<NearbySearchResultDto> filteredResponse = filteredList.acceptNearbyUsers(nearbyResult);
+        NearbySearchResultDto filteredResult = filteredResponse == null ? null : filteredResponse.getBody();
+
+        if (filteredResult == null || filteredResult.getNearbyUserIds().isEmpty()) {
+            throw new NoNearbyUsersException(userId);
+        }
+
+        // Step 4 — store in Redis
+        nearByUserCache.cacheNearbyUsers(userId, filteredResult.getNearbyUserIds());
+        System.out.println("✅ Cached " + filteredResult.getNearbyUserIds().size() + " users for: " + userId);
+
+        return filteredResult;
     }
 }

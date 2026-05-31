@@ -5,16 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.rafay.Orchestration_Service.DTO.NearLocationRequestDTO;
 import com.rafay.Orchestration_Service.DTO.NearbySearchResultDto;
 
-@FeignClient(name = "locationService")
-public interface NearByReq {
 
-    @PostMapping("/location/nearby-search/sync")
-    public ResponseEntity<NearbySearchResultDto> getNearbySearchSync(@RequestBody NearLocationRequestDTO request);
+@FeignClient(name = "match-service")
+public interface FilteredList {
+    
+    @PostMapping("/filter/nearbysearch/list")
+    public ResponseEntity<NearbySearchResultDto> acceptNearbyUsers(@RequestBody NearbySearchResultDto request);
 
     
-
-
 }

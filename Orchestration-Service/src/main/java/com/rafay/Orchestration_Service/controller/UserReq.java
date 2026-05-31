@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rafay.Orchestration_Service.DTO.LocationRequset;
+import com.rafay.Orchestration_Service.DTO.NearbySearchResultDto;
 import com.rafay.Orchestration_Service.FeignClients.NearByUserEvent.NearByReq;
 import com.rafay.Orchestration_Service.service.NearUserList;
 
@@ -25,11 +26,9 @@ public class UserReq {
                 System.out.println("Received discovery request for user: " + userId);
                 System.out.println("Location request: " + locationRequest);
 
-                nearUserList.getNearUserList(locationRequest, userId);
+                NearbySearchResultDto result = nearUserList.getNearUserList(locationRequest, userId);
 
 
-                return ResponseEntity.ok("Discovery request received for user: " + userId +
-                        " at location:");
-        // ...
+                return ResponseEntity.ok(result);
     }
 }

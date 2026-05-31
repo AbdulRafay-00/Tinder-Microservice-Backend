@@ -151,7 +151,7 @@ public class LocationService {
     private LocationRepository locationRepository;
 
     @PostConstruct
-    public void loadAllLocationsIntoRedis() {
+    public void loadAllLocationsIntoRedis() { // ---1
         GeoOperations<String, String> geoOps = redisTemplate.opsForGeo();
         List<LiveLocationDB> allLocations = locationRepository.findAll();
 
@@ -167,12 +167,14 @@ public class LocationService {
         }
         System.out.println("✅ Redis GEO loaded with "
             + allLocations.size() + " users");
-    }
+    }// ---1
+
+
 
     public List<String> getRecommendations(
             String userId,
             BigDecimal latitude,
-            BigDecimal longitude) {
+            BigDecimal longitude) { // ---2
 
         String cacheKey = CACHE_PREFIX + userId;
 
@@ -260,5 +262,5 @@ public class LocationService {
         }
 
         return nearbyUserIds;
-    }
+    } // ---2
 }
