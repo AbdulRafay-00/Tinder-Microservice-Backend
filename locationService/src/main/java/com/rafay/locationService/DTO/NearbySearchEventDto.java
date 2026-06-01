@@ -1,5 +1,5 @@
 package com.rafay.locationService.DTO;
-
+// user ID is coming from JWT
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
