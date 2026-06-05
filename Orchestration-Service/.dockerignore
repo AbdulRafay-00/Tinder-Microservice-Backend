@@ -1,0 +1,24 @@
+# Build output
+
+
+# Logs and temp
+*.log
+logs/
+tmp/
+temp/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+
+# Docker / env
+.env

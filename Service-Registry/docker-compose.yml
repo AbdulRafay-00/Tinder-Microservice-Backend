@@ -1,0 +1,12 @@
+services:
+  service-registry:
+    build: .
+    container_name: tinder-service-registry
+    ports:
+      - "8761:8761"
+    networks:
+      - tinder-network
+
+networks:
+  tinder-network:
+    external: true

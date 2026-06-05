@@ -1,6 +1,6 @@
 package com.rafay.locationService.Kafka.NearbySearchSuggestion;
 
-import tools.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.rafay.locationService.DTO.NearbySearchResultDto;
 

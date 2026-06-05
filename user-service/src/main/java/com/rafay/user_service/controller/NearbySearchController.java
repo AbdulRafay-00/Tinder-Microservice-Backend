@@ -8,9 +8,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import com.rafay.user_service.dto.locationDto.NearbySearchRequestDto;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -24,11 +24,10 @@ public class NearbySearchController {
     @PostMapping("/event")
     public ResponseEntity<String> publishNearbySearch(
             @Valid @RequestBody NearbySearchRequestDto nearbySearchRequestDto,
-            HttpServletRequest httpRequest) {
-        String userId = (String) httpRequest.getAttribute("userId");
+            @RequestHeader(value = "X-User-Id", required = false) String userId) {
 
         if (userId == null || userId.isBlank()) {
-            return ResponseEntity.badRequest().body("Missing or invalid JWT token");
+            return ResponseEntity.badRequest().body("Missing user identity from gateway");
         }
 
         nearbySearchProducer.publishNearbySearch(userId, nearbySearchRequestDto);
