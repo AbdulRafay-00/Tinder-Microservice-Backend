@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 public class OrchestrationServiceApplication {
 
 	public static void main(String[] arge) {
-		SpringApplication.run(OrchestrationServiceApplication.class, args);
+		SpringApplication.run(OrchestrationServiceApplication.class, arge);
 	}
 
 }
