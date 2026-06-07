@@ -19,7 +19,7 @@ public class SwipeEventController {
 
     private final SwipeService swipeService;
 
-    @PostMapping("/event")
+    @PostMapping("/events")
     public ResponseEntity<String> acceptSwipeEvent(@RequestBody SwipeEventRequest request,
         @RequestHeader(value = "X-User-Id") String swiperId) {
         swipeService.saveSwipeEvent(request, swiperId);

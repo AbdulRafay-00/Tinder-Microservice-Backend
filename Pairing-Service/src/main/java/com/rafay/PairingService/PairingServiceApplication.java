@@ -1,4 +1,4 @@
-package com.rafay.Pairing_Service;
+package com.rafay.PairingService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

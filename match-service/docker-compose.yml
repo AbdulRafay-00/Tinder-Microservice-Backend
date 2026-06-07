@@ -33,6 +33,7 @@ services:
       SPRING_JPA_SHOW_SQL: "true"
       SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
       SPRING_KAFKA_BOOTSTRAP_SERVERS: Tinder-kafka:9092  # ✅ ADD THIS
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://tinder-service-registry:8761/eureka/
       SECRET_KEY: ${JWT_SECRET_KEY}
     ports:
       - "8083:8083"

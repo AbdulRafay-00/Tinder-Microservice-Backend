@@ -1,12 +1,12 @@
 package com.rafay.match_service.Service.swipeService;
 import java.time.LocalDateTime;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.rafay.match_service.Dtos.SwipeEventRequest;
+import com.rafay.match_service.Kafka.PairingEventProducer.PairingEventProducer;
 import com.rafay.match_service.db_entries.Swiptable.SwipeDB;
 import com.rafay.match_service.db_entries.Swiptable.SwipeDirectionEnum;
 import com.rafay.match_service.db_entries.Swiptable.SwipeIdEmbedd;
@@ -19,9 +19,9 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class SwipeDBWriteService {
-
     private static final Logger log = LoggerFactory.getLogger(SwipeDBWriteService.class);
     private final SwipeDbRepository swipeDbRepository;
+    private final PairingEventProducer pairingEventProducer;
 
 /*  why did we create twofunction because @Async create a new thread and
 @Transactional does not work across threads. So we need to call the 
@@ -38,7 +38,7 @@ orignal thread can be return without waiting*/
         if (alreadySwiped) {
             log.warn("Duplicate swipe ignored — swiper: {}, swiped: {}", swiperId, request.getSwipedId());
             return;
-        }
+        }else{
 
         SwipeDB swipe = new SwipeDB(
             new SwipeIdEmbedd(swiperId, request.getSwipedId()),
@@ -47,7 +47,7 @@ orignal thread can be return without waiting*/
         );
         swipeDbRepository.save(swipe);
         log.info("Swipe saved — swiper: {}, swiped: {}, direction: {}", swiperId, request.getSwipedId(), direction);
-
+        }
         if (direction == SwipeDirectionEnum.LEFT) {
             return;
         }
@@ -58,7 +58,7 @@ orignal thread can be return without waiting*/
 
         if (isMatch) {
             log.info("MATCH detected — {} & {}", swiperId, request.getSwipedId());
-            // TODO: fire Kafka event
+            pairingEventProducer.publishPairingEvent(swiperId, request.getSwipedId());
         } else {
             log.info("No match yet — waiting for other person to swipe");
         }
