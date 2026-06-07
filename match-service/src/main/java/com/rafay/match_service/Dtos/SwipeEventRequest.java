@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SwipeEventRequest {
-    private String swiperId;
     private String swipedId;
     private String swipeDirection;
 }
