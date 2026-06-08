@@ -1,0 +1,23 @@
+name: tinder-notification-service
+
+services:
+  notification-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tinder-notification-service
+    restart: unless-stopped
+    ports:
+      - "8095:8095"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://tinder-service-registry:8761/eureka/
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: Tinder-kafka:9092
+      AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
+      AWS_SECRET_KEY: ${AWS_SECRET_KEY}
+      AWS_SES_SENDER: ${AWS_SES_SENDER}
+    networks:
+      - tinder-network
+
+networks:
+  tinder-network:
+    external: true
