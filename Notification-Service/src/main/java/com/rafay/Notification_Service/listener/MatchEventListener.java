@@ -1,72 +1,60 @@
 package com.rafay.Notification_Service.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rafay.Notification_Service.client.UserServiceClient;
+import com.rafay.Notification_Service.controller.UserServiceClient;
 import com.rafay.Notification_Service.dto.MatchEventDto;
 import com.rafay.Notification_Service.dto.UserDto;
 import com.rafay.Notification_Service.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Component;
 
+import org.springframework.kafka.annotation.BackOff;
+import org.springframework.kafka.annotation.DltHandler;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.RetryableTopic;
+import org.springframework.kafka.retrytopic.TopicSuffixingStrategy;
+import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class MatchEventListener {
 
-	private final ObjectMapper objectMapper;
-	private final UserServiceClient userServiceClient;
-	private final EmailService emailService;
-	private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ObjectMapper objectMapper;
+    private final UserServiceClient userServiceClient;
+    private final EmailService emailService;
 
-	@KafkaListener(groupId = "${app.kafka.group-id}", topics = "${app.kafka.topics.match-topic}")
-	public void listenMain(String message) {
-		handleMessage(message, "pairing-events-retry-1", "main");
-	}
+    @RetryableTopic(
+        attempts = "4",
+        backOff =  @BackOff(delay = 5000, multiplier = 2.0),
+        topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE
+    )
+    @KafkaListener(
+        topics = "${app.kafka.topics.match-topic}",
+        groupId = "${app.kafka.group-id}",
+        containerFactory = "mainContainerFactory"
+    )
+    public void listen(String message) {
+        try {
+            log.info("Match event received: {}", message);
 
-	@KafkaListener(groupId = "${app.kafka.group-id}", topics = "pairing-events-retry-1")
-	public void listenRetry1(String message) {
-		handleMessage(message, "pairing-events-retry-2", "retry-1");
-	}
+            MatchEventDto event = objectMapper.readValue(message, MatchEventDto.class);
 
-	@KafkaListener(groupId = "${app.kafka.group-id}", topics = "pairing-events-retry-2")
-	public void listenRetry2(String message) {
-		handleMessage(message, "pairing-events-dlt", "retry-2");
-	}
+            UserDto swiper = userServiceClient.getUserById(event.swiperId());
+            UserDto swiped = userServiceClient.getUserById(event.swipedId());
 
-	@KafkaListener(groupId = "${app.kafka.group-id}", topics = "pairing-events-dlt")
-	public void listenDlt(String message) {
-		log.error("Permanent failure received on DLT: {}", message);
-	}
+            emailService.sendMatchEmail(swiper.email(), swiped.name(), swiper.name());
+            emailService.sendMatchEmail(swiped.email(), swiper.name(), swiped.name());
 
-	private void handleMessage(String rawMessage, String nextTopic, String stage) {
-		try {
-			log.info("Received {} event: {}", stage, rawMessage);
-			MatchEventDto event = objectMapper.readValue(rawMessage, MatchEventDto.class);
-			UserDto swiper = userServiceClient.getUserById(event.swiperId());
-			UserDto swiped = userServiceClient.getUserById(event.swipedId());
-			log.info("Fetched users for match: {} and {}", swiper.id(), swiped.id());
-			emailService.sendMatchEmail(swiper.email(), swiped.name());
-			emailService.sendMatchEmail(swiped.email(), swiper.name());
-			log.info("Processed {} event successfully", stage);
-		} catch (Exception exception) {
-			log.error("Failed to process {} event. Forwarding to {}", stage, nextTopic, exception);
-			forwardWithDelay(rawMessage, nextTopic);
-		}
-	}
+            log.info("Match emails sent to {} and {}", swiper.email(), swiped.email());
 
-	private void forwardWithDelay(String rawMessage, String nextTopic) {
-		try {
-			Thread.sleep(5000);
-			kafkaTemplate.send(nextTopic, rawMessage);
-			log.info("Forwarded failed message to {}", nextTopic);
-		} catch (InterruptedException interruptedException) {
-			Thread.currentThread().interrupt();
-			log.error("Retry delay interrupted while forwarding to {}", nextTopic, interruptedException);
-		} catch (Exception exception) {
-			log.error("Failed to forward message to {}", nextTopic, exception);
-		}
-	}
+        } catch (Exception e) {
+            log.error("Failed to process match event: {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    @DltHandler
+    public void handleDlt(String message) {
+        log.error("Permanent failure — all retries exhausted. Message: {}", message);
+    }
 }

@@ -1,4 +1,4 @@
-package com.rafay.Notification_Service.client;
+package com.rafay.Notification_Service.controller;
 
 import com.rafay.Notification_Service.dto.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
