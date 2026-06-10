@@ -1,10 +1,10 @@
 package com.rafay.user_service.repository;
 
-import java.util.UUID;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.rafay.user_service.db_entities.UserProfileDB;
@@ -14,6 +14,11 @@ public interface UserProfileDBRepository extends JpaRepository<UserProfileDB, St
     Optional<UserProfileDB> findByName(String name);
     Optional<UserProfileDB> findByPhoneNumber(String phoneNumber);
 
-    @Query("SELECT u.name FROM UserProfileDB u WHERE u.id = :id")
-    String findUserNameById(String id);
+    @Query("""
+           SELECT u.name
+           FROM UserProfileDB u
+            WHERE u.userId = :id
+           """)
+    String findUserNameById(@Param("id") String id);
+
 }
