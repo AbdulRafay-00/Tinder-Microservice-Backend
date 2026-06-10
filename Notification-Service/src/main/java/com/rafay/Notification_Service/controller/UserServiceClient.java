@@ -1,13 +1,16 @@
 package com.rafay.Notification_Service.controller;
 
 import com.rafay.Notification_Service.dto.UserDto;
+import com.rafay.Notification_Service.dto.UserServiceClientDto;
+
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "user-service")
 public interface UserServiceClient {
 
-	@GetMapping("/user-service/users/{userId}")
-	UserDto getUserById(@PathVariable("userId") String userId);
+	@PostMapping("/notify")
+	UserDto getUserById(@RequestBody Object userServiceClientDto);
+
 }

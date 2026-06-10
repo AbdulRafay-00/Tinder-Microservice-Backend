@@ -13,16 +13,15 @@ import software.amazon.awssdk.services.sesv2.SesV2Client;
 @Configuration
 public class SesConfig {
 
-    @Value("${aws.accessKeyId}")
-    private String accessKeyId;
+    @Value("${aws.access-key}")
+private String accessKeyId;
 
-    @Value("${aws.secretKey}")
-    private String secretKey;
+@Value("${aws.secret-key}")
+private String secretKey;
 
-    @Value("${aws.region}")
-    private String region;
-
-    @Bean
+@Value("${aws.region}")
+private String region;
+     @Bean
     public SesV2Client sesV2Client() {
         AwsBasicCredentials credentials = AwsBasicCredentials.create(accessKeyId, secretKey);
         return SesV2Client.builder()

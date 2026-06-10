@@ -14,5 +14,8 @@ public interface FilteredList {
     @PostMapping("/filter/nearbysearch/list")
     public ResponseEntity<NearbySearchResultDto> acceptNearbyUsers(@RequestBody NearbySearchResultDto request);
 
-    
+//     @PostMapping
+// UserDto getUserById(
+//         @RequestBody UserServiceClientDto dto
+// );
 }
