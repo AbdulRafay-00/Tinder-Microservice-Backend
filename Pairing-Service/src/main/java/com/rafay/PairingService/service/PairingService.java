@@ -25,6 +25,7 @@ public class PairingService {
         PairDbId id = new PairDbId(swiperId, swipedId);
         PairDB pairDB = new PairDB(id, LocalDateTime.now(), PairEnum.PENDING);
         pairDBRepository.save(pairDB);
+        // Send pairing event to Kafka topic
         pairingEventProducer.sendPairingEvent(swiperId, swipedId);
     }
 }
