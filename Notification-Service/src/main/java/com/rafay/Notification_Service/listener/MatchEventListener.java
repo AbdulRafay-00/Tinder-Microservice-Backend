@@ -26,10 +26,8 @@ public class MatchEventListener {
     private final EmailService emailService;
     UserServiceClientDto userServiceClientDto;
 
-    @RetryableTopic(attempts = "4", backOff = @BackOff(delay = 5000, multiplier = 2.0), 
-    topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE)
-    @KafkaListener(topics = "${app.kafka.topics.match-topic}", groupId = "${app.kafka.group-id}", 
-    containerFactory = "mainContainerFactory")
+    @RetryableTopic(attempts = "4", backOff = @BackOff(delay = 5000, multiplier = 2.0), topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE)
+    @KafkaListener(topics = "${app.kafka.topics.match-topic}", groupId = "${app.kafka.group-id}", containerFactory = "mainContainerFactory")
     public void listen(String message) {
         try {
             log.info("Match event received: {}", message);
@@ -37,7 +35,21 @@ public class MatchEventListener {
             MatchEventDto event = objectMapper.readValue(message, MatchEventDto.class);
 
             UserDto swiper = userServiceClient.getUserById(new UserServiceClientDto(event.swiperId()));
+            log.info("Fetched swiper data: {}", swiper);
             UserDto swiped = userServiceClient.getUserById(new UserServiceClientDto(event.swipedId()));
+            log.info("Fetched swiped data: {}", swiped);
+
+            if (swiper == null || swiped == null) {
+                log.warn("Could not fetch user data — skipping. swiperId: {}, swipedId: {}",
+                        event.swiperId(), event.swipedId());
+                return;
+            }
+
+            if (swiper.email() == null || swiped.email() == null) {
+                log.warn("Missing email — skipping. swiperId: {}, swipedId: {}",
+                        event.swiperId(), event.swipedId());
+                return;
+            }
 
             emailService.sendMatchEmail(swiper.email(), swiped.name(), swiper.name());
             emailService.sendMatchEmail(swiped.email(), swiper.name(), swiped.name());
