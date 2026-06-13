@@ -15,7 +15,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;
 import org.springframework.kafka.retrytopic.TopicSuffixingStrategy;
 import org.springframework.stereotype.Component;
-
+//
 @Slf4j
 @Component
 @RequiredArgsConstructor
