@@ -6,3 +6,8 @@ Detail Preview of the entire app
 <p align="center">
   <img src="https://github.com/user-attachments/assets/14a8b905-464b-48a8-abc3-6e02353d0883" width="1000">
 </p>
+
+
+𝗕𝗿𝗲𝗮𝗸𝗻𝗼𝘄𝗻 𝗼𝗳 𝗲𝗮𝗰𝗵 𝗠𝗶𝗰𝗿𝗼𝘀𝗲𝗿𝘃𝗶𝗰𝗲
+𝟭) 𝗨𝘀𝗲𝗿-𝗦𝗲𝗿𝘃𝗶𝗱𝗲
+Handel's the user data and login event
