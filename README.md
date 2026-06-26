@@ -11,3 +11,11 @@ Detail Preview of the entire app
 𝗕𝗿𝗲𝗮𝗸𝗻𝗼𝘄𝗻 𝗼𝗳 𝗲𝗮𝗰𝗵 𝗠𝗶𝗰𝗿𝗼𝘀𝗲𝗿𝘃𝗶𝗰𝗲
 𝟭) 𝗨𝘀𝗲𝗿-𝗦𝗲𝗿𝘃𝗶𝗱𝗲
 Handel's the user data and login event
+
+𝟮)𝗟𝗼𝗰𝗮𝘁𝗶𝗼𝗻 𝗦𝗲𝗿𝘃𝗶𝗰𝗲
+
+- Stores the user's current latitude and longitude.
+- Indexes user locations in Redis using GeoHash.
+- Performs radius-based searches (e.g., within 10 km).
+- Returns the list of nearby user IDs to the Orchestration Service.
+- Does not cache search results; caching is handled by the Orchestration Service.
