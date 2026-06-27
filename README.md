@@ -19,3 +19,5 @@ Handel's the user data and login event
 - Performs radius-based searches (e.g., within 10 km).
 - Returns the list of nearby user IDs to the Orchestration Service.
 - Does not cache search results; caching is handled by the Orchestration Service.
+
+𝟯) 𝗢𝗿𝗰𝗵𝗲𝘀𝘁𝗿𝗮𝘁𝗶𝗼𝗻-𝗦𝗲𝗿𝘃𝗶𝗰𝗲
