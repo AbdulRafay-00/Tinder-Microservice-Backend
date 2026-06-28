@@ -21,3 +21,5 @@ Handel's the user data and login event
 - Does not cache search results; caching is handled by the Orchestration Service.
 
 𝟯) 𝗢𝗿𝗰𝗵𝗲𝘀𝘁𝗿𝗮𝘁𝗶𝗼𝗻-𝗦𝗲𝗿𝘃𝗶𝗰𝗲
+
+𝟰) 𝗣𝗮𝗶𝗿𝗶𝗻𝗴-𝗦𝗲𝗿𝘃𝗶𝗰𝗲
