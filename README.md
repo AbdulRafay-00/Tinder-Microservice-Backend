@@ -26,3 +26,6 @@ Handel's the user data and login event
 
 𝟱) 𝗠𝗮𝘁𝗰𝗵-𝗦𝗲𝗿𝘃𝗶𝗰𝗲
 𝟲) 𝗡𝗼𝘁𝗶𝗳𝗶𝗰𝗮𝘁𝗶𝗼𝗻-𝗦𝗲𝗿𝘃𝗶𝗰𝗲 
+
+𝟳) 𝗞𝗮𝗳𝗸𝗮-𝗖𝗼𝗻𝘁𝗮𝗶𝗻𝗲𝗿
+shared network across all containers
