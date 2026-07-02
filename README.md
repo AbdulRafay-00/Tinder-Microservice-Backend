@@ -29,3 +29,5 @@ Handel's the user data and login event
 
 𝟳) 𝗞𝗮𝗳𝗸𝗮-𝗖𝗼𝗻𝘁𝗮𝗶𝗻𝗲𝗿
 shared network across all containers
+
+𝟴) 𝗘𝘂𝗿𝗲𝗸𝗮-𝗦𝗲𝗿𝘃𝗶𝗰𝗲
