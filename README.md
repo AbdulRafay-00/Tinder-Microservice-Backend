@@ -31,3 +31,5 @@ Handel's the user data and login event
 shared network across all containers
 
 𝟴) 𝗘𝘂𝗿𝗲𝗸𝗮-𝗦𝗲𝗿𝘃𝗶𝗰𝗲
+
+9) DISTRIBUTED SQL
