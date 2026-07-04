@@ -33,3 +33,4 @@ shared network across all containers
 𝟴) 𝗘𝘂𝗿𝗲𝗸𝗮-𝗦𝗲𝗿𝘃𝗶𝗰𝗲
 
 9) DISTRIBUTED SQL
+10) DOCKER SERVICE
