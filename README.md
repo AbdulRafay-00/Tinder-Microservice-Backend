@@ -34,3 +34,5 @@ shared network across all containers
 
 9) DISTRIBUTED SQL
 10) DOCKER SERVICE
+
+1)) role of redis
