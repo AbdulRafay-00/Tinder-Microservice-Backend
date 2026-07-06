@@ -35,4 +35,6 @@ shared network across all containers
 9) DISTRIBUTED SQL
 10) DOCKER SERVICE
 
-1)) role of redis
+11) role of redis
+
+12) role of AWS SES
