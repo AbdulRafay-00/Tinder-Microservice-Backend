@@ -38,3 +38,5 @@ shared network across all containers
 11) role of redis
 
 12) role of AWS SES
+
+explanation of each part
