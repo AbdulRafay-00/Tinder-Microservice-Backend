@@ -55,7 +55,7 @@ public class MatchEventListener {
             emailService.sendMatchEmail(swiper.email(), swiped.username(), swiper.username());
             emailService.sendMatchEmail(swiped.email(), swiper.username(), swiped.username());
 
-            log.info("Match emails sent to {} and {} and {} and {}", swiper.email(), swiped.email(), swiper.username(), swiped.username());
+            log.info("Match emails sent to {} and {} user 1 {} user2 {}", swiper.email(), swiped.email(), swiper.username(), swiped.username());
 
         } catch (Exception e) {
             log.error("Failed to process match event: {}", e.getMessage());
