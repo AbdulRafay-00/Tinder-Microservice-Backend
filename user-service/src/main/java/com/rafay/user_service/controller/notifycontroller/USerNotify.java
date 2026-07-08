@@ -18,6 +18,9 @@ public class UserNotify {
     @PostMapping("/notify")
     public NotifyDto notifyUser(@RequestBody notifyFrontEndDto request) {
         String userId = request == null ? null : request.getUserId();
+
+        System.out.println("User ID: " + userId); // Debugging line to print the userId
+        System.out.println("Request Body: " + request); // Debugging line to print the request body
         return notifyService.getNotifyData(userId == null ? null : userId);
     }
 }

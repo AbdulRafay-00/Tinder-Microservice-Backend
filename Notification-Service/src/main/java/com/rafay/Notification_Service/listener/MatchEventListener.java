@@ -39,6 +39,7 @@ public class MatchEventListener {
             UserDto swiped = userServiceClient.getUserById(new UserServiceClientDto(event.swipedId()));
             log.info("Fetched swiped data: {}", swiped);
 
+
             if (swiper == null || swiped == null) {
                 log.warn("Could not fetch user data — skipping. swiperId: {}, swipedId: {}",
                         event.swiperId(), event.swipedId());
@@ -51,10 +52,10 @@ public class MatchEventListener {
                 return;
             }
 
-            emailService.sendMatchEmail(swiper.email(), swiped.name(), swiper.name());
-            emailService.sendMatchEmail(swiped.email(), swiper.name(), swiped.name());
+            emailService.sendMatchEmail(swiper.email(), swiped.username(), swiper.username());
+            emailService.sendMatchEmail(swiped.email(), swiper.username(), swiped.username());
 
-            log.info("Match emails sent to {} and {}", swiper.email(), swiped.email());
+            log.info("Match emails sent to {} and {} and {} and {}", swiper.email(), swiped.email(), swiper.username(), swiped.username());
 
         } catch (Exception e) {
             log.error("Failed to process match event: {}", e.getMessage());
