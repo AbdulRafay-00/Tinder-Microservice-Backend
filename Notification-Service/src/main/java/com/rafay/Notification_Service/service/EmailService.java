@@ -23,6 +23,7 @@ public class EmailService {
         this.sesV2Client = sesV2Client;
         this.senderEmail = senderEmail;
     }
+    
 public void sendMatchEmail(String toEmail, String recipientName, String matchedWithName) {
     String subject = "🎉 You have a new match on Tinder!";
     String htmlBody = "<!DOCTYPE html><html><body style='margin:0; padding:0; background-color:#F0F2F5;'>"
