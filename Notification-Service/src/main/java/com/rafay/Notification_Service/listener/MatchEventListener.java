@@ -52,8 +52,8 @@ public class MatchEventListener {
                 return;
             }
 
-            emailService.sendMatchEmail(swiper.email(), swiped.username(), swiper.username());
-            emailService.sendMatchEmail(swiped.email(), swiper.username(), swiped.username());
+            emailService.sendMatchEmail(swiper.email(), swiper.username(), swiped.username());
+            emailService.sendMatchEmail(swiped.email(), swiped.username(), swiper.username());
 
             log.info("Match emails sent to {} and {} user 1 {} user2 {}", swiper.email(), swiped.email(), swiper.username(), swiped.username());
 
