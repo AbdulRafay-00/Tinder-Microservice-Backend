@@ -40,3 +40,11 @@ shared network across all containers
 12) role of AWS SES
 
 explanation of each part
+
+
+OUTPUT
+Swiper
+img
+
+swiped
+img
