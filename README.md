@@ -44,7 +44,7 @@ explanation of each part
 
 OUTPUT
 Swiper
-img
+img placeholder
 
 swiped
 img
