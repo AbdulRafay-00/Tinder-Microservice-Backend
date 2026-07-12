@@ -46,5 +46,6 @@ OUTPUT
 Swiper
 img placeholder
 
+
 swiped
-img
+img placeholder
