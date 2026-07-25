@@ -17,4 +17,16 @@ public class SignupDto {
     private String gender;
     private String location;
     private String password;
+    public void setCity(String string) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setCity'");
+    }
+    public void setProfilePicture(String string) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setProfilePicture'");
+    }
+    public void setCountry(String string) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setCountry'");
+    }
 }
