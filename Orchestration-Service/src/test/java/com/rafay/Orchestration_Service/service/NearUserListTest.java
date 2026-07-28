@@ -26,6 +26,8 @@ import com.rafay.Orchestration_Service.FeignClients.NearByUserEvent.NearByReq;
 import com.rafay.Orchestration_Service.GlobalExeption.NoNearbyUsersException;
 import com.rafay.Orchestration_Service.Redis.NearByUserCache;
 
+
+@ExtendWith(MockitoExtension.class)
 public class NearUserListTest {
     @Mock
     private NearByReq nearByReq;
@@ -116,5 +118,34 @@ public class NearUserListTest {
 
         assertTrue(exception.getMessage().contains(userId));
         verify(nearByUserCache, never()).cacheNearbyUsers(anyString(), anyList());
+    }
+
+    @Test
+    @DisplayName("Test getNearUserList method when cache miss and filtering is successful")
+    @ExtendWith(MockitoExtension.class)
+    void testGetNearUserList_CacheMiss_FilteredListNotEmpty_CacheAdded() {
+        NearLocationRequestDTO nearLocationRequestDTO = new NearLocationRequestDTO();
+        nearLocationRequestDTO.setUserId(userId);
+        nearLocationRequestDTO.setLatitude(locationRequest.getLatitude());
+        nearLocationRequestDTO.setLongitude(locationRequest.getLongitude());
+
+        // Arrange
+        when(nearByUserCache.getCachedNearbyUsers(userId))
+            .thenReturn(null);
+        
+        when(nearByReq.getNearbySearchSync(nearLocationRequestDTO))
+            .thenReturn(ResponseEntity.ok(new NearbySearchResultDto(userId, Arrays.asList("user456", "user789"))));
+
+        when(filteredList.acceptNearbyUsers(any(NearbySearchResultDto.class)))
+            .thenReturn(ResponseEntity.ok(new NearbySearchResultDto(userId, Arrays.asList("user456"))));
+
+        // Act
+        NearbySearchResultDto result = nearUserList.getNearUserList(locationRequest, userId);
+
+        // Assert
+        assertEquals(userId, result.getUserId());
+        assertEquals(1, result.getNearbyUserIds().size());
+        assertTrue(result.getNearbyUserIds().contains("user456"));
+        verify(nearByUserCache).cacheNearbyUsers(eq(userId), eq(Arrays.asList("user456")));
     }
 }
