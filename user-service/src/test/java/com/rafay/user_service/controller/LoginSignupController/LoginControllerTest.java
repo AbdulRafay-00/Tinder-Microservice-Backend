@@ -33,4 +33,9 @@ public class LoginControllerTest {
 
 
     }
+
+    @Test
+    void testUser_login2() {
+        
+    }
 }
