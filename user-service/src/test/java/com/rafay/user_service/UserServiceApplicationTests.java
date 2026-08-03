@@ -2,9 +2,11 @@ package com.rafay.user_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-class UserServiceApplicationTests {
+@ActiveProfiles("test")
+class UserServiceApplicationTests extends BaseIntegrationTest {
 
 	@Test
 	void contextLoads() {
