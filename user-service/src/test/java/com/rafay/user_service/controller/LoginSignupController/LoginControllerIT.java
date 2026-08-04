@@ -17,7 +17,7 @@ class LoginControllerIT extends BaseIntegrationTest {
     private MockMvc mockMvc;
 
     @Test
-    @Sql(scripts = {"/cleanup.sql", "/login-test-data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = {"/cleanup.sql", "/sql-scripts/login-scripts/login-test-data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void loginWithValidCredentials_shouldReturnSuccess() throws Exception {
         String requestBody = """
                 {
@@ -34,7 +34,7 @@ class LoginControllerIT extends BaseIntegrationTest {
     }
 
     @Test
-    @Sql(scripts = {"/cleanup.sql", "/login-test-data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = {"/cleanup.sql", "/sql-scripts/login-scripts/login-test-data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void loginWithInvalidCredentials_shouldReturnUnauthorized() throws Exception {
         String requestBody = """
                 {

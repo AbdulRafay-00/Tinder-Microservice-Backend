@@ -70,6 +70,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.rafay.user_service.GlobalExceptions.ConflictException;
 import com.rafay.user_service.db_entities.AuthCredentials;
 import com.rafay.user_service.db_entities.UserProfileDB;
 import com.rafay.user_service.dto.SignupDto;
@@ -91,27 +92,21 @@ public class SignupService {
     @Transactional
     public String signup(SignupDto signupDto) {
 
+
         // Check if email already exists
-        if (authCredentialsRepository
-                .findByUserEmail(signupDto.getEmail())
-                .isPresent()) {
-            return "Email already registered!";
+        if (authCredentialsRepository.findByUserEmail(signupDto.getEmail()).isPresent()) {
+            throw new ConflictException("Email already registered!");
         }
 
         // Check if phone number already exists
-        if (userProfileDBRepository
-                .findByPhoneNumber(signupDto.getPhoneNumber())
-                .isPresent()) {
-            return "Phone number already registered!";
+        if (userProfileDBRepository.findByPhoneNumber(signupDto.getPhoneNumber()).isPresent()) {
+            throw new ConflictException("Phone number already registered!");
         }
 
         // Check if name already exists
-        if (userProfileDBRepository
-                .findByName(signupDto.getName())
-                .isPresent()) {
-            return "Name already registered!";
+        if (userProfileDBRepository.findByName(signupDto.getName()).isPresent()) {
+            throw new ConflictException("Name already registered!");
         }
-
         try {
             AuthCredentials authCredentials = new AuthCredentials();
             authCredentials.setUserEmail(signupDto.getEmail());
