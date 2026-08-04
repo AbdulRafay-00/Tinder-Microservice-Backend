@@ -10,14 +10,14 @@ import com.rafay.user_service.BaseIntegrationTest;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+@Sql(scripts = "/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class LoginControllerIT extends BaseIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    @Sql("/login-test-data.sql")
+    @Sql(scripts = {"/cleanup.sql", "/login-test-data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void loginWithValidCredentials_shouldReturnSuccess() throws Exception {
         String requestBody = """
                 {
@@ -34,7 +34,7 @@ class LoginControllerIT extends BaseIntegrationTest {
     }
 
     @Test
-    @Sql("/login-test-data.sql")
+    @Sql(scripts = {"/cleanup.sql", "/login-test-data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void loginWithInvalidCredentials_shouldReturnUnauthorized() throws Exception {
         String requestBody = """
                 {
