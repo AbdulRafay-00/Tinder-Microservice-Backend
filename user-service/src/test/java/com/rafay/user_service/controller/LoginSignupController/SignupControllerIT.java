@@ -39,7 +39,13 @@ public class SignupControllerIT extends BaseIntegrationTest {
     }
 
     @Test
-    @Sql("/duplicate-email.sql")
+   @Sql(
+    scripts = {
+        "/cleanup.sql",
+        "/sql-scripts/signup-scripts/duplicate-email.sql"
+    },
+    executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+)
     void signupWithDuplicateEmail_shouldReturnConflict() throws Exception {
 
         String requestBody = """
@@ -64,7 +70,13 @@ public class SignupControllerIT extends BaseIntegrationTest {
     }
 
     @Test
-    @Sql("/duplicate-phone.sql")
+    @Sql(
+    scripts = {
+        "/cleanup.sql",
+        "/sql-scripts/signup-scripts/duplicate-phone.sql"
+    },
+    executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+)
     void signupWithDuplicatePhoneNumber_shouldReturnConflict() throws Exception {
 
         String requestBody = """
@@ -89,7 +101,13 @@ public class SignupControllerIT extends BaseIntegrationTest {
     }
 
     @Test
-    @Sql("/duplicate-name.sql")
+   @Sql(
+    scripts = {
+        "/cleanup.sql",
+        "/sql-scripts/signup-scripts/duplicate-name.sql"
+    },
+    executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+)
     void signupWithDuplicateName_shouldReturnConflict() throws Exception {
 
         String requestBody = """
