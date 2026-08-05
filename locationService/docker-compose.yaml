@@ -50,7 +50,7 @@ services:
       - tinder-network
 
   redis:
-    image: redis:latest
+    image: redis:8.6.3
     container_name: Tinder_redis
     ports:
       - "6379:6379"

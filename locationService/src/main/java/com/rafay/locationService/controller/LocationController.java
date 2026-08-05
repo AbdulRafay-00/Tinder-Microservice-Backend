@@ -16,7 +16,7 @@ public class LocationController {
 
     @Autowired
     private NearbySearchService nearbySearchService;
-//for unit testing
+//for testing
 @PostMapping("/recommendations")
 public ResponseEntity<List<String>> getRecommendations(
         @RequestBody LocationRequestDTO request) {
