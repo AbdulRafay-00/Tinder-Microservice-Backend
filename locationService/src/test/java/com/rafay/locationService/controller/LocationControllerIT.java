@@ -19,6 +19,7 @@ import com.rafay.locationService.repository.LocationRepository;
 import com.rafay.locationService.testConfig.BaseIntegrationTest;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 public class LocationControllerIT extends BaseIntegrationTest {
     @Autowired
     private LocationService locationService;
@@ -35,8 +36,8 @@ public class LocationControllerIT extends BaseIntegrationTest {
     // GeoOperations<String, String> geoOps = redisTemplate.opsForGeo();
 
     // List<LiveLocationDB> allLocations = locationRepository.findAll();
-   
-    @Sql("/sql-scripts/Pre_Add_data.sql")
+
+    @Sql("/sql-scripts/Pre-Add-data.sql")
     @Test
     void redisCacheHit() throws Exception {
         locationService.loadAllLocationsIntoRedis();
@@ -49,14 +50,30 @@ public class LocationControllerIT extends BaseIntegrationTest {
                 """;
 
         mockMvc.perform(post("/location/nearby-search/sync")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(request)
-        ).andExpect(status().isOk());
-            
-    
-    
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(request)).andExpect(status().isOk());
+
         // Test logic for Redis cache hit
 
+    }
+
+    @Test
+    @Sql("/sql-scripts/Pre_Add_data.sql")
+    void redisCacheMiss() throws Exception {
+
+        String request = """
+                {
+                    "userId": "test-user-1",
+                    "latitude": 24.860,
+                    "longitude": 67.200
+                }
+                """;
+
+        mockMvc.perform(
+                post("/location/nearby-search/sync")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isOk());
     }
 
 }
