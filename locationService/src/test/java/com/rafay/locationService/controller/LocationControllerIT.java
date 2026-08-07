@@ -58,7 +58,7 @@ public class LocationControllerIT extends BaseIntegrationTest {
     }
 
     @Test
-    @Sql("/sql-scripts/Pre_Add_data.sql")
+    @Sql("/sql-scripts/Pre-Add-data.sql")
     void redisCacheMiss() throws Exception {
 
         String request = """
