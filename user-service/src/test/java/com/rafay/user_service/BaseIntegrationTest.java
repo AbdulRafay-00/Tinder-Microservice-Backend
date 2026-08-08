@@ -15,6 +15,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 public abstract class BaseIntegrationTest {
 
     @Container
-    @ServiceConnection
+    @ServiceConnection          
     static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0.43");
 }
