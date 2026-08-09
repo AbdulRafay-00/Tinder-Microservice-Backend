@@ -1,4 +1,4 @@
-package com.rafay.Orchestration_Service.resources.testcontainerconfig;
+package com.rafay.Orchestration_Service.testcontainerconfig;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
