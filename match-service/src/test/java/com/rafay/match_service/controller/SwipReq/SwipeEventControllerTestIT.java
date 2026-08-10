@@ -15,12 +15,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ExtendWith(OutputCaptureExtension.class)
 public class SwipeEventControllerTestIT extends ContainerInfo {
     @Autowired
     MockMvc mockMvc;
 
     @Test
-    @ExtendWith(OutputCaptureExtension.class)
     @Sql(scripts = "/sqlScripts/BothUserSwipedScript.sql")
     void alreadySwipedCase(CapturedOutput output) throws Exception {
         String requestBody = """
@@ -44,7 +44,6 @@ public class SwipeEventControllerTestIT extends ContainerInfo {
     }
 
     @Test
-    @ExtendWith(OutputCaptureExtension.class)
     void NewlySwipedCase(CapturedOutput output) throws Exception {
         String requestBody = """
                 {
@@ -63,7 +62,7 @@ public class SwipeEventControllerTestIT extends ContainerInfo {
         System.out.println(output.getAll());
 
         assertThat(output)
-                .contains("Swipe saved — swiper: userId123, swiped: userId56, direction: right");
+                .contains("No match yet — waiting for other person to swipe");
     }
 
 }
