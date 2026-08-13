@@ -20,8 +20,7 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
-
-public class PairSwipeKafkaListenerTestIT extends ContainerInfo { 
+public class PairSwipeKafkaListenerTestIT extends ContainerInfo {
 
     @Autowired
     private PairDBRepository pairDBRepository;
@@ -59,5 +58,25 @@ public class PairSwipeKafkaListenerTestIT extends ContainerInfo {
             PairDbId id = new PairDbId("user-A", "user-B");
             assertThat(pairDBRepository.findById(id)).isPresent();
         });
+    }
+
+    @Test
+    void garbagePayload_deserializationFails_noSaveOccurs() throws Exception {
+        testProducer = buildTestProducer();
+
+        // Given: a payload that is NOT valid JSON at all — this will break
+        // objectMapper.readValue()
+        String garbagePayload = "this is not valid json {{{";
+
+        // When: publish the broken payload onto the real topic
+        testProducer.send(pairingTopic, garbagePayload);
+        Awaitility.await()
+                .pollDelay(Duration.ofSeconds(3))
+                .atMost(Duration.ofSeconds(5))
+                .untilAsserted(() -> {
+                    PairDbId id = new PairDbId("user-A", "user-B"); // any id — nothing should ever be saved from this
+                                                                    // payload
+                    assertThat(pairDBRepository.findById(id)).isEmpty();
+                });
     }
 }
