@@ -21,7 +21,7 @@ private String secretKey;
 
 @Value("${aws.region}")
 private String region;
-     @Bean
+    @Bean
     public SesV2Client sesV2Client() {
         AwsBasicCredentials credentials = AwsBasicCredentials.create(accessKeyId, secretKey);
         return SesV2Client.builder()
