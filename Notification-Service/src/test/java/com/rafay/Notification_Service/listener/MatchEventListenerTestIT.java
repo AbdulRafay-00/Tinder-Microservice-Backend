@@ -118,4 +118,33 @@ public class MatchEventListenerTestIT extends ContainerInfo {
         });
 
     }
+
+    
+    @Test
+    void testListenOnKafkaRetryQueue3() throws Exception {
+        kafkaTemplate = buildTestProducer();
+
+        MatchEventDto matchEventDto = new MatchEventDto("swiperId", "swipedId");
+        String jsonres = objectMapper.writeValueAsString(matchEventDto); // convert to JSON string
+        //mock the userServiceClient to return UserDto objects for the given swiperId and swipedId
+        when(userServiceClient.getUserById(new UserServiceClientDto(matchEventDto.swiperId())))
+            .thenThrow(new RuntimeException("fail on original"))
+            .thenThrow(new RuntimeException("fail on retry 1"))
+            .thenThrow(new RuntimeException("fail on retry 2"))
+            .thenReturn(new UserDto("swiperEmail@test.com", "swiperUsername"));
+
+        when(userServiceClient.getUserById(new UserServiceClientDto(matchEventDto.swipedId())))
+            .thenThrow(new RuntimeException("fail on original"))
+            .thenThrow(new RuntimeException("fail on retry 1"))
+            .thenThrow(new RuntimeException("fail on retry 2"))
+            .thenReturn(new UserDto("swipedEmail@test.com", "swipedUsername"));
+        // stub producer
+                kafkaTemplate.send(topic, jsonres);
+
+        Awaitility.await().atMost(Duration.ofSeconds(10)).untilAsserted(() -> {
+                verify(emailService).sendMatchEmail("swiperEmail@test.com", "swiperUsername", "swipedUsername");
+                verify(emailService).sendMatchEmail("swipedEmail@test.com", "swipedUsername", "swiperUsername");
+        });
+
+    }
 }
