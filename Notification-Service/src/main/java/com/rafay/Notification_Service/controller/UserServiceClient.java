@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface UserServiceClient {
 
 	@PostMapping("/notify")
-	UserDto getUserById(@RequestBody Object userServiceClientDto);
+	// UserDto getUserById(@RequestBody Object userServiceClientDto);
+	UserDto getUserById(@RequestBody UserServiceClientDto userServiceClientDto);
 
 }
