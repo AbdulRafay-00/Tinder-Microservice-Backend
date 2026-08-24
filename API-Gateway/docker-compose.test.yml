@@ -1,0 +1,10 @@
+services:
+  api-gateway:
+    networks:
+      - tinder-test-network
+
+networks:
+  tinder-test-network:
+    external: true
+
+
