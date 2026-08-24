@@ -1,0 +1,13 @@
+services:
+  mysql:
+    volumes: !reset []
+    networks:
+      - tinder-test-network
+
+  user-service:
+    networks:
+      - tinder-test-network
+
+networks:
+  tinder-test-network:
+    external: true
