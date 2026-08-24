@@ -1,0 +1,9 @@
+services:
+  service-registry:
+    networks:
+      - tinder-test-network
+
+networks:
+  tinder-test-network:
+    name: tinder-test-network
+    driver: bridge
