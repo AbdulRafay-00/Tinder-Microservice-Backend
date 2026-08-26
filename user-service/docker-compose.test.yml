@@ -1,6 +1,7 @@
 services:
   mysql:
-    volumes: !reset []
+    volumes:
+      - ./login-seed.sql:/docker-entrypoint-initdb.d/login-seed.sql
     networks:
       - tinder-test-network
 
