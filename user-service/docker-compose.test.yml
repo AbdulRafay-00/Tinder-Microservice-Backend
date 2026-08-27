@@ -5,12 +5,12 @@ services:
     restart: "no"
     volumes: !override
       - ./sql-test-script/LoginSeed.sql:/docker-entrypoint-initdb.d/01-login-seed.sql:ro
-      - mysql_test_data:/var/lib/mysql
     networks: !override
       - tinder-test-network
 
   user-service:
-    environment: !override
+    environment: !
+      
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tinder_user_service
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
@@ -26,9 +26,6 @@ services:
     networks: !override
       - tinder-network
       - tinder-test-network
-
-volumes: !override
-  mysql_test_data:
 
 networks: !override
   tinder-network:
