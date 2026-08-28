@@ -10,7 +10,8 @@ services:
 
   user-service:
     environment: !
-      
+      # SPRING_DATASOURCE_URL: jdbc:mysql://tinder-user-service-mysql-test:3306/tinder_user_service
+
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tinder_user_service
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}

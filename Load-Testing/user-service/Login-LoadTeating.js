@@ -6,11 +6,15 @@ const TOTAL_SEEDED_USERS = 250;
 const SEEDED_PASSWORD = '12345';
 
 export const options = {
-  vus: 2,           // just 2 virtual users
-  duration: '10s',  // run for 10 seconds only
+    scenarios: {
+      login_LoadTest: {
+        executor: 'constant-vus',
+        vus: 100,
+      }
+    }
 };
 
-export default function () {
+export default function loginLoadTest () {
   const userIndex = Math.floor(Math.random() * TOTAL_SEEDED_USERS) + 1;
   const email = `loadtest${userIndex}@test.com`;
 
