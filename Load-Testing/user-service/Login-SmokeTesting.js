@@ -6,27 +6,31 @@ const TOTAL_SEEDED_USERS = 250;
 const SEEDED_PASSWORD = "12345";
 
 export const options = {
-    scenarios: {
-        login_SmokeTest:{
-            "executor": "constant-vus",
-            "vus" : 20,
-            "duration": "30s",
-            "exec": "loginSmokeTest"
-        }
-    },
-    thresholds: {
-      'http_req_duration': [
-        'p(90)<550',
-        'p(95)<600',
-        'p(98)<900',
+  scenarios: {
+    load_test: {
+      executor: 'ramping-vus',
+      startVUs: 0,
+      stages: [
+        { duration: '20s', target: 50 },   // ramp up
+        { duration: '1m', target: 50 },   // hold steady (plateau)
+        { duration: '20s', target: 0 },    // ramp down
       ],
-      'http_req_failed': ['rate<0.01'],
-    }
+    },
+  },
+
+  thresholds: {
+    'http_req_duration': [
+      'p(90)<550',
+      'p(95)<600',
+      'p(98)<900',
+    ],
+    'http_req_failed': ['rate<0.01'],
+  }
 
 }
 
 
-export function loginSmokeTest () {
+export function loginSmokeTest() {
   const userIndex = Math.floor(Math.random() * TOTAL_SEEDED_USERS) + 1;
   const email = `loadtest${userIndex}@test.com`;
 

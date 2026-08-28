@@ -10,6 +10,7 @@ export const options = {
       login_LoadTest: {
         executor: 'constant-vus',
         vus: 100,
+        duration: '30s',
       }
     }
 };
