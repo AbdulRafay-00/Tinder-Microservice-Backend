@@ -5,16 +5,28 @@ const BASE_URL =  'http://localhost:8089/user-service/login/portal';
 const TOTAL_SEEDED_USERS = 250;
 const SEEDED_PASSWORD = '12345';
 
-export const options = {
-    scenarios: {
-      login_LoadTest: {
-        executor: 'constant-vus',
-        vus: 100,
-        duration: '30s',
-      }
-    }
-};
 
+export const options = {
+  scenarios: {
+    load_test: {
+      executor: 'ramping-vus',
+      startVUs: 0,
+      stages: [
+        { duration: '20s', target: 50 },   // ramp up
+        { duration: '1m', target: 50 },   // hold steady (plateau)
+        { duration: '20s', target: 0 },    // ramp down
+      ],
+    },
+  },
+  thresholds: {
+    'http_req_duration': [
+      'p(90)<2550',
+      'p(95)<2600',
+    ],
+    'http_req_failed': ['rate<0.01'],
+  }
+
+}
 export default function loginLoadTest () {
   const userIndex = Math.floor(Math.random() * TOTAL_SEEDED_USERS) + 1;
   const email = `loadtest${userIndex}@test.com`;
