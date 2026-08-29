@@ -47,6 +47,19 @@ Swiper
 img placeholder
 
 
+
+# Performance Optimization: Fixing a Redundant Auth Query
+
+Load testing the login endpoint with k6 surfaced a hidden inefficiency: every request was querying auth_credentials twice — once internally during Spring Security authentication, and again to re-fetch the same user for JWT generation. The fix reused the already-authenticated principal instead of re-querying, cutting the login flow down to a single database call.
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Avg Latency | 1.00s | 597ms |
+| p95 Latency | 1.29s | 804ms |
+| Throughput | 20.06 req/s | 24.97 req/s |
+
+
+
 swiped
 img placeholder
 
