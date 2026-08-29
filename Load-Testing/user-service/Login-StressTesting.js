@@ -17,7 +17,7 @@ export const options = {
         { duration: '3m', target: 300 },  // hold at stress level
         { duration: '1m', target: 500 },  // push to 5x — find the breaking point
         { duration: '3m', target: 500 },  // hold — stabilize or keep degrading?
-        { duration: '2m', target: 0 },    // ramp down — recovery check
+        { duration: '1m', target: 0 },    // ramp down — recovery check
       ],
     },
   },
