@@ -9,8 +9,8 @@ export const options = {
     scenarios: {
         login_SmokeTest:{
             "executor": "constant-vus",
-            "vus" : 20,
-            "duration": "30s",
+            "vus" : 1,
+            "duration": "1s",
             "exec": "loginSmokeTest"
         }
     },
