@@ -26,7 +26,10 @@ BEGIN
 
         INSERT INTO auth_credentials (user_id, user_email, user_password)
         VALUES (uid, CONCAT('loadtest', i, '@test.com'),
-                '$2a$12$ItfQKCvLZhVNlkLAfPCVhOKTTUSMms1tJWAmHuaRRCHDT4hf3qEOu');
+                -- '$2a$12$ItfQKCvLZhVNlkLAfPCVhOKTTUSMms1tJWAmHuaRRCHDT4hf3qEOu'
+                '$2a$10$bdV4xpHu3ZZXCBTsJhjM4.LijFlvRVADETWKTtuZQJRijiJuid2wm'
+                -- '$2a$10$dummyhashedpassword123456789abcdef'
+                );
 
         INSERT INTO user_profiledb (user_id, name, phone_number, age, photo_url, bio, gender, location)
         VALUES (uid, CONCAT('LoadUser', i), CONCAT('030000', LPAD(i, 5, '0')), 25,

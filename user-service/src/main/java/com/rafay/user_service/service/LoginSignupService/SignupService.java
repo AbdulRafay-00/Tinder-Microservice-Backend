@@ -114,7 +114,7 @@ public class SignupService {
                 passwordEncoder.encode(signupDto.getPassword())
             );
 
-            AuthCredentials savedAuth = 
+            AuthCredentials savedAuth =
                 authCredentialsRepository.save(authCredentials);
 
             UserProfileDB userProfile = new UserProfileDB();

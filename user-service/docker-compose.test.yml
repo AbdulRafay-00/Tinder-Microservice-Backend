@@ -25,11 +25,9 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://tinder-service-registry:8761/eureka/
 
     networks: !override
-      - tinder-network
       - tinder-test-network
 
 networks: !override
-  tinder-network:
-    external: true
+  
   tinder-test-network:
     external: true
