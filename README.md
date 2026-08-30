@@ -46,9 +46,9 @@ OUTPUT
 Swiper
 img placeholder
 
+# Load Testing
 
-
-# Performance Optimization: Fixing a Redundant Auth Query
+## Performance Optimization: Fixing a Redundant Auth Query
 
 Load testing the login endpoint with k6 surfaced a hidden inefficiency: every request was querying auth_credentials twice — once internally during Spring Security authentication, and again to re-fetch the same user for JWT generation. The fix reused the already-authenticated principal instead of re-querying, cutting the login flow down to a single database call.
 
@@ -58,6 +58,17 @@ Load testing the login endpoint with k6 surfaced a hidden inefficiency: every re
 | p95 Latency | 1.29s | 804ms |
 | Throughput | 20.06 req/s | 24.97 req/s |
 
+
+## Performance Discovery: Connection Pool Exhaustion and Hashing Overhead Under Stress
+
+Stress testing at higher concurrency (100 VUs) surfaced two additional bottlenecks beyond the query fix: the HikariCP connection pool was exhausting under load, causing requests to queue and eventually time out, and password hashing overhead was adding significant CPU cost per login at high concurrency. Increasing the pool's maximum size and tuning the hashing cost factor resolved both issues.
+
+| Metric | Before | After | Change |
+|---|---|---|---|
+| Avg Latency | 597ms | 151.01ms | ↓ 74.7% |
+| p95 Latency | 804ms | 249.39ms | ↓ 69.0% |
+| Throughput | 24.97 req/s | 33.64 req/s | ↑ 34.7% |
+| Failure Rate | 0.00% | 0.00% | — |
 
 
 swiped
