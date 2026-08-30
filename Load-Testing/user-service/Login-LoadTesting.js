@@ -3,7 +3,7 @@ import { check, sleep } from 'k6';
 
 const BASE_URL =  'http://localhost:8089/user-service/login/portal';
 const TOTAL_SEEDED_USERS = 250;
-const SEEDED_PASSWORD = '12345';
+const SEEDED_PASSWORD = '123456789';
 
 
 export const options = {

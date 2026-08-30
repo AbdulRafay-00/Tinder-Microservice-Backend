@@ -1,9 +1,9 @@
 services:
   service-registry:
-    networks:
+    networks: !override
       - tinder-test-network
 
-networks:
+networks: !override
   tinder-test-network:
     name: tinder-test-network
     driver: bridge

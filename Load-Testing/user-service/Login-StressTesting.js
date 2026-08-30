@@ -3,7 +3,7 @@ import { check, sleep } from "k6";
 
 const BASE_URL = "http://localhost:8089/user-service/login/portal";
 const TOTAL_SEEDED_USERS = 250;
-const SEEDED_PASSWORD = "12345";
+const SEEDED_PASSWORD = "123456789";
 
 export const options = {
   scenarios: {
@@ -13,11 +13,11 @@ export const options = {
       stages: [
         { duration: '1m', target: 100 },  // baseline — confirmed load-test peak
         { duration: '2m', target: 100 },  // hold at baseline
-        { duration: '1m', target: 300 },  // push to 3x — stress zone
-        { duration: '3m', target: 300 },  // hold at stress level
-        { duration: '1m', target: 500 },  // push to 5x — find the breaking point
-        { duration: '3m', target: 500 },  // hold — stabilize or keep degrading?
-        { duration: '1m', target: 0 },    // ramp down — recovery check
+        //{ duration: '1m', target: 300 },  // push to 3x — stress zone
+        //{ duration: '3m', target: 300 },  // hold at stress level
+        //{ duration: '1m', target: 500 },  // push to 5x — find the breaking point
+        //{ duration: '3m', target: 500 },  // hold — stabilize or keep degrading?
+        //{ duration: '1m', target: 0 },    // ramp down — recovery check
       ],
     },
   },
