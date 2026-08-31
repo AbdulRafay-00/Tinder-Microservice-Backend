@@ -1,0 +1,27 @@
+services:
+  mysql:
+    image: mysql:8.0.43
+    container_name: match-service-mysql-test
+    restart: "no"
+    volumes: !override
+      - ./init-sql-file:/docker-entrypoint-initdb.d/01-init.sql
+    networks: !override
+      - tinder-test-network
+
+  match-service:
+    environment: !override
+      SPRING_DATASOURCE_URL: jdbc:mysql://match-service-mysql-test:3306/tinder_match_service
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: Tinder-kafka:9092
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://tinder-service-registry:8761/eureka/
+      SECRET_KEY: ${JWT_SECRET_KEY}
+    networks: !override
+      - tinder-test-network
+
+networks: !override
+  tinder-test-network:
+    external: true
