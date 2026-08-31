@@ -1,0 +1,38 @@
+service:
+  mysql:
+    image: mysql:8.0.43
+    container_name: tinder-location-service-mysql-test
+    restart: "no"
+    volumes: !override
+      - ./you file path:/docker-entrypoint-initdb.d/01-namefiletobesendindocker
+    networks: !override
+      - tinder-test-network
+
+  location-service:
+    environment: !override
+      SPRING_DATASOURCE_URL: jdbc:mysql://tinder-location-service-mysql-test:3306/tinder_Location_service
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQLDialect
+      SECRET_KEY: ${JWT_SECRET_KEY}
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: Tinder-kafka:9092
+      SPRING_DATA_REDIS_HOST: Tinder-redis-test
+      SPRING_DATA_REDIS_PORT: 6379
+    networks: !override
+      - tinder-test-network
+
+  redis:
+    container_name: Tinder-redis-test
+    networks: !override
+      - tinder-test-network
+
+
+networks: !override
+  tinder-test-network:
+    external: true
+
+  
