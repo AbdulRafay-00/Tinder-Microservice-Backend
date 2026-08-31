@@ -1,0 +1,8 @@
+services:
+  notification-service:
+    networks: !override
+      - tinder-test-network
+
+networks: !override
+  tinder-test-network:
+    external: true
