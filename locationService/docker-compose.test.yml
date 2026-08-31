@@ -27,6 +27,7 @@ service:
 
   redis:
     container_name: Tinder-redis-test
+    volumes: !reset
     networks: !override
       - tinder-test-network
 

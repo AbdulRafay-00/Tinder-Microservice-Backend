@@ -55,6 +55,8 @@ services:
     ports:
       - "6379:6379"
     command: redis-server --appendonly yes
+    volumes:
+      - location_redis_data:/data
     networks:
       - tinder-network
 
@@ -62,6 +64,7 @@ services:
 
 volumes:
   mysql_data:
+  location_redis_data:
 
 networks:
   tinder-network:

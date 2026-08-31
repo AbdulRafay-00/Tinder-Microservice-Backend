@@ -132,7 +132,8 @@ import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.GeoOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.Collections;
@@ -141,6 +142,7 @@ import java.util.List;
 @Service
 public class LocationService {
 
+    private static final Logger log = LoggerFactory.getLogger(LocationService.class);
     private static final String GEO_KEY = "user_locations";
     private static final String CACHE_PREFIX = "recommendations:";
 
@@ -152,6 +154,16 @@ public class LocationService {
 
     @PostConstruct
     public void loadAllLocationsIntoRedis() { // ---1
+
+        Long existingCount = redisTemplate.opsForZSet().size(GEO_KEY);
+
+        if (existingCount != null && existingCount > 0) {
+            log.info("Redis GEO already warm ({} users) — skipping MySQL bootstrap", existingCount);
+            return;
+        }
+
+        log.warn("Redis GEO empty — bootstrapping from MySQL");
+
         GeoOperations<String, String> geoOps = redisTemplate.opsForGeo();
         List<LiveLocationDB> allLocations = locationRepository.findAll();
 
@@ -165,8 +177,7 @@ public class LocationService {
                 loc.getUserId()
             );
         }
-        System.out.println("✅ Redis GEO loaded with "
-            + allLocations.size() + " users");
+        log.info("✅ Redis GEO loaded with {} users", allLocations.size());
     }// ---1
 
 
@@ -184,11 +195,11 @@ public class LocationService {
             .range(cacheKey, 0, -1);
 
         if (cached != null && !cached.isEmpty()) {
-            System.out.println("✅ Cache HIT for: " + userId);
+            log.info("✅ Cache HIT for: {}", userId);
             return cached;
         }
 
-        System.out.println("❌ Cache MISS for: " + userId);
+        log.info("❌ Cache MISS for: {}", userId);
 
         // STEP 2: Check if location actually changed
         LiveLocationDB existing = locationRepository
