@@ -9,7 +9,7 @@ services:
       - tinder-test-network
 
   user-service:
-    environment: !
+    environment: !override
       # SPRING_DATASOURCE_URL: jdbc:mysql://tinder-user-service-mysql-test:3306/tinder_user_service
 
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tinder_user_service
