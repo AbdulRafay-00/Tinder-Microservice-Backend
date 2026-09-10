@@ -5,7 +5,7 @@ services:
     volumes: !reset
     networks: !override
       - tinder-test-network
-    environment: !override
+    environment: 
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://Tinder-kafka-Test:9092
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@Tinder-kafka-Test:9093
 
