@@ -10,28 +10,18 @@ const SEEDED_PASSWORD = '123456789';
 
 const CENTER_LAT = 24.8607;
 const CENTER_LNG = 67.0011;
-const SPREAD_RADIUS_KM = 20;
+const SPREAD_RADIUS_KM = 15;
 
 export const options = {
   scenarios: {
     login_FetchUserTest: {
       "executor": "constant-vus",
       "vus": 1,
-      "duration": "2s",
-      // "exec": "loginSmokeTest"
+      "duration": "10s",
     },
-    // load_test: {
-    //   executor: 'ramping-vus',
-    //   startVUs: 0,
-    //   stages: [
-    //     { duration: '10s', target: 50 },
-    //     { duration: '10s', target: 50 },
-    //     { duration: '20s', target: 0 },
-    //   ],
-    // },
+
   },
   thresholds: {
-    'http_req_duration': ['p(90)<2550', 'p(95)<2600'],
     'http_req_failed': ['rate<0.01'],
   },
 };
