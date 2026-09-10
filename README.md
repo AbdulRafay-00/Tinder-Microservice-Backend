@@ -70,7 +70,7 @@ Stress testing at higher concurrency (100 VUs) surfaced two additional bottlenec
 | Throughput | 24.97 req/s | 33.64 req/s | ↑ 34.7% |
 | Failure Rate | 0.00% | 0.00% | — |
 
-## User recomendation Load Testing
+## User recommendation Load Testing
 
 ### Baseline Discovery Load Test: Full Chain Through Orchestration (Cache-Hit Path)
 
