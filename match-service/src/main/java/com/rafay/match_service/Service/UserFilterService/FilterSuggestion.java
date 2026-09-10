@@ -18,11 +18,16 @@ public class FilterSuggestion {
     }
 
     public NearbySearchResultDto filterSwiped(NearbySearchResultDto request) {
-
+        if(request == null || request.getNearbyUserIds() == null || request.getNearbyUserIds().isEmpty()) {
+            return request; // Nothing to filter
+        }
         // Step 1 — get all users this person already swiped
         List<String> alreadySwiped = swipeDBRepository
                 .findSwipedIdsBySwiperId(request.getUserId());
 
+        if (alreadySwiped == null || alreadySwiped.isEmpty()) {
+            return request; // No swipes yet, return original list
+        }
         // Step 2 — copy list (don't modify original)
         List<String> filteredList = new ArrayList<>(request.getNearbyUserIds());
 
