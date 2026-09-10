@@ -48,6 +48,7 @@ img placeholder
 
 # Load Testing
 
+## Login Load Testing
 ## Performance Optimization: Fixing a Redundant Auth Query
 
 Load testing the login endpoint with k6 surfaced a hidden inefficiency: every request was querying auth_credentials twice — once internally during Spring Security authentication, and again to re-fetch the same user for JWT generation. The fix reused the already-authenticated principal instead of re-querying, cutting the login flow down to a single database call.
@@ -57,7 +58,6 @@ Load testing the login endpoint with k6 surfaced a hidden inefficiency: every re
 | Avg Latency | 1.00s | 597ms |
 | p95 Latency | 1.29s | 804ms |
 | Throughput | 20.06 req/s | 24.97 req/s |
-
 
 ## Performance Discovery: Connection Pool Exhaustion and Hashing Overhead Under Stress
 
@@ -70,6 +70,33 @@ Stress testing at higher concurrency (100 VUs) surfaced two additional bottlenec
 | Throughput | 24.97 req/s | 33.64 req/s | ↑ 34.7% |
 | Failure Rate | 0.00% | 0.00% | — |
 
+## User recomendation Load Testing
+
+### Baseline Discovery Load Test: Full Chain Through Orchestration (Cache-Hit Path)
+
+​```mermaid
+flowchart TD
+    A[User] --> B[API Gateway]
+    B --> C[Login]
+    C -- Fail --> C
+    C -- Pass --> D[Orchestration Service]
+    D --> E[Location Service]
+    D --> F[Match Service]
+    E --> D
+    F --> D
+    D --> G[Response to User]
+​```
+
+Tested at 100 VUs over 3 minutes with weighted geo-clustered test users (dense urban core, sparser suburban/rural zones).
+
+| Metric | Result |
+|---|---|
+| Avg Latency | 22.61ms |
+| p90 Latency | 41.51ms |
+| p95 Latency | 58.09ms |
+| Max Latency | 1.96s |
+| Throughput | 43.25 req/s |
+| Failure Rate | 0.00% |
 
 #Complete System Load Test
 
