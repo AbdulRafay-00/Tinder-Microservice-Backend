@@ -12,8 +12,11 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-
-import com.fasterxml.jackson.databind.ser.std.StringSerializer;
+//kafka backoff timer not working
+// why did we change because jackson convert obj to string and we cannot send a string over a network so we 
+// we use kafka own seriliazation and deserialization to send and receive messages over the network
+// import com.fasterxml.jackson.databind.ser.std.StringSerializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +42,7 @@ public class KafkaConsumerConfig {
 	}
 
 
-    // ✅ renamed to match @KafkaListener containerFactory = "mainContainerFactory"
+    // renamed to match @KafkaListener containerFactory = "mainContainerFactory"
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> mainContainerFactory(
             ConsumerFactory<String, String> consumerFactory) {
