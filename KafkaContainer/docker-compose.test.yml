@@ -1,0 +1,19 @@
+services:
+  kafka:
+    image: apache/kafka:4.2.0
+    container_name: Tinder-kafka-Test
+    volumes: !reset
+    networks: !override
+      - tinder-test-network
+    environment: 
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://Tinder-kafka-Test:9092
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@Tinder-kafka-Test:9093
+
+      CLUSTER_ID: RvUjKp5hQFak6p9K4jaebA
+
+
+networks: !override
+  tinder-test-network:
+    external: true
+
+volumes: !reset

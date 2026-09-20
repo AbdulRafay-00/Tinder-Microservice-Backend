@@ -1,7 +1,7 @@
 name: tinder-orchestration-service
 
 services:
-  api-gateway:
+  orchestration-service:
     build:
       context: .
       dockerfile: Dockerfile

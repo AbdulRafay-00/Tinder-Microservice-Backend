@@ -20,8 +20,8 @@ public class SwipeController {
     public ResponseEntity<String> processSwipeEvent(@RequestBody SwipEventFrontendDto swipEventFrontendDto,
         @RequestHeader(value = "X-User-Id", required = false) String swiperId
     ){
-        System.out.println("Processing swipe controller userId=" + swiperId);
-        System.out.println("DTO received: " + swipEventFrontendDto);
+        // System.out.println("Processing swipe controller userId=" + swiperId);
+        // System.out.println("DTO received: " + swipEventFrontendDto);
         
         if (swiperId == null || swiperId.isBlank()) {
             System.err.println("ERROR: No userId in request. Check gateway forwarded headers.");
@@ -33,7 +33,7 @@ public class SwipeController {
             return ResponseEntity.badRequest().body("Invalid request: swipedId required");
         }
         
-        System.out.println("Received swipe: swipedId=" + swipEventFrontendDto.getSwipedId() + ", direction=" + swipEventFrontendDto.getSwipeDirection() + ", swiperId=" + swiperId);
+        // System.out.println("Received swipe: swipedId=" + swipEventFrontendDto.getSwipedId() + ", direction=" + swipEventFrontendDto.getSwipeDirection() + ", swiperId=" + swiperId);
         producer.processSwipe(swiperId, swipEventFrontendDto);
         return ResponseEntity.ok("Swipe recorded");
     }

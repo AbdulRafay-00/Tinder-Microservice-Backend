@@ -27,7 +27,7 @@ public class NotifyService {
 
                 String email = auth == null ? null : auth.getUserEmail();
                 String name = profile == null ? null : profile.getName();
-                System.out.println("DEBUG email=" + email + " name=" + name);
+                // System.out.println("DEBUG email=" + email + " name=" + name);
 
                 return new NotifyDto(email, name);
         }

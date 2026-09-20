@@ -32,5 +32,9 @@ public class UserPrinciple implements UserDetails{
     public String getUsername() {
         return authCredentials.getUserEmail();
     }
+
+    public AuthCredentials getAuthCredentials() {
+        return authCredentials;
+    }
     
 }

@@ -1,0 +1,52 @@
+import http from 'k6/http';
+import { check, sleep } from 'k6';
+
+const BASE_URL =  'http://localhost:8089/user-service/login/portal';
+const TOTAL_SEEDED_USERS = 250;
+const SEEDED_PASSWORD = '123456789';
+
+
+export const options = {
+  scenarios: {
+    load_test: {
+      executor: 'ramping-vus',
+      startVUs: 0,
+      stages: [
+        { duration: '20s', target: 50 },   // ramp up
+        { duration: '1m', target: 50 },   // hold steady (plateau)
+        { duration: '20s', target: 0 },    // ramp down
+      ],
+    },
+  },
+  thresholds: {
+    'http_req_duration': [
+      'p(90)<2550',
+      'p(95)<2600',
+    ],
+    'http_req_failed': ['rate<0.01'],
+  }
+
+}
+export default function loginLoadTest () {
+  const userIndex = Math.floor(Math.random() * TOTAL_SEEDED_USERS) + 1;
+  const email = `loadtest${userIndex}@test.com`;
+
+  const payload = JSON.stringify({
+    email: email,
+    password: SEEDED_PASSWORD,
+  });
+
+  const params = {
+    headers: { 'Content-Type': 'application/json' },
+  };
+
+  const res = http.post(`${BASE_URL}`, payload, params);
+
+  console.log(`Status: ${res.status}, Body: ${res.body}`);
+
+  check(res, {
+    'status is 200': (r) => r.status === 200,
+  });
+
+  sleep(1);
+}

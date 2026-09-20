@@ -1,0 +1,17 @@
+services:
+  orchestration-service:
+    environment: !override
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://tinder-service-registry:8761/eureka/
+      SPRING_DATA_REDIS_HOST: Tinder-Redis-Orchestration-Test
+      SPRING_DATA_REDIS_PORT: 6379
+    networks: !override
+      - tinder-test-network
+
+  redis:
+    container_name: Tinder-Redis-Orchestration-Test
+    networks: !override
+      - tinder-test-network
+
+networks: !override
+  tinder-test-network:
+    external: true
