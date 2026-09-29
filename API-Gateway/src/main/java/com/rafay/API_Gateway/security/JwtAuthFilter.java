@@ -123,8 +123,10 @@ public class JwtAuthFilter implements WebFilter {
     private static final List<String> PUBLIC_PATHS = List.of(
             "/login/portal",
             "/user-service/login/portal",
+	    "/user-service/signup/service",
             "/auth/register",
-            "/actuator/health"
+            "/actuator/health",
+	    "/signup/service"
     );
 
     public JwtAuthFilter(JwtUtil jwtUtil) {
