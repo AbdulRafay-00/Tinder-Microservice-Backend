@@ -31,6 +31,12 @@ jobs:
     - name: Build with Maven
       run: mvn clean package -DskipTests
       working-directory: ./user-service
+
+
+    - name: Check Java and Maven
+      run: |
+        java -version
+        mvn -version
     # - name: Build microservices with Maven
     #   shell: bash
     #   run: |
