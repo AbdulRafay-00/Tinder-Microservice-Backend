@@ -10,7 +10,7 @@ import com.rafay.user_service.dto.notifydto.notifyFrontEndDto;
 import com.rafay.user_service.service.notifyservice.NotifyService;
 
 @RestController
-
+// Used For SNS Notifications
 public class UserNotify {
     @Autowired
     NotifyService notifyService;
