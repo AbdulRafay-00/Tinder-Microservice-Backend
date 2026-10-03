@@ -42,7 +42,7 @@ jobs:
           ${{ vars.DOCKERHUB_USERNAME }}/user-service-repo:latest
           ${{ vars.DOCKERHUB_USERNAME }}/user-service-repo:${{ github.sha }}
           ${{ vars.DOCKERHUB_USERNAME }}/user-service-repo:1.0.${{ github.run_number }}
-    # latest in tag 1 is just a tag to show it can be any name 
+    # latest in tag 1 is just a tag to show it can be any name of 
     # - name: Build microservices with Maven
     #   shell: bash
     #   run: |
